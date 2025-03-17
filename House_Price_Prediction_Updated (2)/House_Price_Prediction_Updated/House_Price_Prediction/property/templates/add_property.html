@@ -1,0 +1,172 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Property</title>
+    <style>
+        /* Main container styles */
+        .main {
+            position: relative;
+            top: 10%;
+            left: 50%;
+            transform: translate(-50%, 0);
+            width: 700px;
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            padding: 30px;
+            text-align: center;
+            border-radius: 15px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+            border: 3px solid #fff;
+        }
+
+        /* Header styles */
+        h1 {
+            font-size: 26px;
+            color: #fff;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 20px;
+            color: #ff6347;
+        }
+
+        /* Form element styles */
+        input[type="text"], input[type="number"], input[type="submit"], textarea {
+            width: 60%;  /* Set the input width to 60% of the container */
+            padding: 12px;
+            margin: 10px 0;  /* Add space around the inputs */
+            border-radius: 8px;
+            border: 2px solid #ddd;
+            font-size: 16px;
+            background-color: #f4f4f9;
+            transition: 0.3s ease;
+            display: block;  /* Make the input block-level to center */
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        input[type="text"]:focus, input[type="number"]:focus, textarea:focus {
+            border-color: #ff7e5f;
+            box-shadow: 0px 0px 8px rgba(255, 126, 95, 0.5);
+        }
+
+        /* Submit button styles */
+        input[type="submit"] {
+            background-color: #ff6347;
+            color: white;
+            cursor: pointer;
+            padding: 14px 28px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            width: 60%;  /* Center the button and make it the same size as input */
+        }
+
+        input[type="submit"]:hover {
+            background-color: #ff4500;
+        }
+
+        /* Step indicator styles */
+        .step-indicator {
+            font-size: 18px;
+            color: #fff;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        /* House image styles */
+        .house-image {
+            width: 100%;
+            height: auto;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+
+        /* Background styles */
+        body {
+            background-size: cover;
+            background-repeat: no-repeat;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Background for each step */
+        .step-1 {
+            background-image: url("{% static 'step1_bg.jpeg' %}");
+        }
+
+        .step-2 {
+            background-image: url("{% static 'step2_bg.jpg' %}");
+        }
+
+        .step-3 {
+            background-image: url("{% static 'step3_bg.jpg' %}");
+        }
+
+        /* Top-right form styling */
+        .topright {
+        position: fixed;
+        top: 20px;
+        right: 30px; /* Adjusted from 20px to 30px to move the button a little to the left */
+    }
+
+    .topright form input[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 8px 10px; /* Increased padding for a bigger button */
+        border: none;
+        border-radius: 8px;
+        font-size: 16px; /* Increased font size for better visibility */
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        width: 150px; /* Set a fixed width for the button */
+        text-align: center; /* Ensures the text is centered */
+    }
+
+    .topright form input[type="submit"]:hover {
+        background-color: #45a049;
+    }
+    </style>
+</head>
+<body class="step-{{ step }}">
+
+    <div class="main">
+        <h1>Please enter the following values</h1>
+
+        <!-- Step Indicator -->
+        <div class="step-indicator">Step {{ step }} of 3</div>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="{% if step < 3 %}Next{% else %}Predict{% endif %}"/>
+        </form>
+
+        {% if result2 %}
+            <h2>{{ result2 }}</h2>
+            <!-- Display House Image -->
+            <img src="{% static 'step3_bg.jpg' %}" class="house-image" alt="House Image"/>
+
+            <h2>{{ cost_text }}</h2> <!-- Cost per square meter -->
+            <h2>{{ result2 }}</h2> <!-- Predicted price -->
+            <h2>{{ final_estimation_text }}</h2> <!-- Predicted price -->
+        {% endif %}
+
+    </div>
+
+    <div class="topright">
+        <form action="list">
+            <input type="submit" value="Report">
+        </form>
+    </div>
+
+</body>
+</html>
